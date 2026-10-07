@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birthday Letter - Step 2</title>
+  <link rel="stylesheet" href="../css/bd.css">
+</head>
+<body>
+
+  <main id="birthday-container">
+    <section class="page">
+      <h2>What I Want to Say</h2>
+
+      <form id="message-form">
+        <div>
+          <label for="birthday-message">Your Message:</label>
+          <textarea id="birthday-message" name="birthdayMessage" rows="8" placeholder="Write your message..."></textarea>
+        </div>
+
+        <div class="button-group">
+          <a href="ready.html" class="prev-btn">Previous</a>
+          <a href="page3.html" id="next-to-page3" class="next-btn">Next</a>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    // Helper function to format ordinal suffixes (1st, 2nd, 3rd, 21st, etc.)
+    function getOrdinal(n) {
+      const s = ["th", "st", "nd", "rd"];
+      const v = n % 100;
+      return n + (s[(v - 20) % 10] || s[v] || s[0]);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      // Retrieve saved values from localStorage
+      const name = localStorage.getItem('bd_name') || 'my friend';
+      const birthYear = localStorage.getItem('bd_birthYear');
+      const currentDateStr = localStorage.getItem('bd_currentDate');
+
+      // Calculate age
+      let ageText = '';
+      if (birthYear) {
+        const currentYear = currentDateStr ? new Date(currentDateStr).getFullYear() : new Date().getFullYear();
+        const age = currentYear - parseInt(birthYear, 10);
+        if (age > 0) {
+          ageText = ` on your ${getOrdinal(age)} birthday`;
+        }
+      }
+
+      // Populate textarea with formatted message
+      const messageTextarea = document.getElementById('birthday-message');
+      messageTextarea.value = `Happy Birthday, ${name}${ageText}! Today is a special day! For you and for me! Well, for everyone you hold dear too! We had so much fun together and many more to come! I really appreciate you crossing paths with my life, and I hope you feel the same!`;
+    });
+
+    // Save custom message before going to Page 3
+    document.getElementById('next-to-page3').addEventListener('click', function () {
+      const customMessage = document.getElementById('birthday-message').value;
+      localStorage.setItem('bd_customMessage', customMessage);
+    });
+  </script>
+
+</body>
+</html>

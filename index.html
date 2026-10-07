@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birthday Letter - Step 1</title>
+  <link rel="stylesheet" href="./css/bd.css">
+</head>
+<body>
+
+  <main id="birthday-container">
+    <section class="page">
+      <h1>Birthday Celebration</h1>
+      
+      <form id="info-form">
+        <div>
+          <label for="user-name">Recipient's Name:</label>
+          <input type="text" id="user-name" name="userName" placeholder="Enter name">
+        </div>
+
+        <div>
+          <label for="current-date">Current Date:</label>
+          <input type="date" id="current-date" name="currentDate">
+        </div>
+
+        <div>
+          <label for="birth-year">Year Born In:</label>
+          <input type="number" id="birth-year" name="birthYear" placeholder="e.g. 2000" min="1900" max="2100">
+        </div>
+
+        <p id="error-msg" style="color: #ff4757; font-weight: 600; text-align: center; display: none; margin-top: 8px; font-size: 0.9rem;"></p>
+
+        <div class="button-group">
+          <a href="pages/ready.html" class="next-btn">Next</a>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    document.getElementById('current-date').valueAsDate = new Date();
+
+    document.querySelector('.next-btn').addEventListener('click', function (e) {
+      e.preventDefault();
+
+      const nameInput = document.getElementById('user-name');
+      const birthYearInput = document.getElementById('birth-year');
+      const currentDateInput = document.getElementById('current-date');
+      const errorMsg = document.getElementById('error-msg');
+
+      const name = nameInput.value.trim();
+      const birthYear = birthYearInput.value.trim();
+      const currentDate = currentDateInput.value;
+
+      nameInput.style.borderColor = '#ffd1d7';
+      birthYearInput.style.borderColor = '#ffd1d7';
+      errorMsg.style.display = 'none';
+
+      let missingFields = [];
+
+      if (!name) {
+        nameInput.style.borderColor = '#ff4757';
+        missingFields.push("Recipient's Name");
+      }
+
+      if (!birthYear) {
+        birthYearInput.style.borderColor = '#ff4757';
+        missingFields.push("Year Born In");
+      }
+
+      if (missingFields.length > 0) {
+        errorMsg.textContent = `Please fill in: ${missingFields.join(" & ")}`;
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      localStorage.setItem('bd_name', name);
+      localStorage.setItem('bd_currentDate', currentDate);
+      localStorage.setItem('bd_birthYear', birthYear);
+
+      window.location.href = 'pages/ready.html';
+    });
+  </script>
+
+</body>
+</html>

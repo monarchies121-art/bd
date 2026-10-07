@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birthday Letter - Are You Ready?</title>
+  <link rel="stylesheet" href="../css/bd.css">
+  <style>
+    .ready-card {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .sub-prompt {
+      font-size: 0.95rem;
+      color: #777;
+      margin-top: 8px;
+      font-style: italic;
+    }
+
+    .ready-buttons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      margin-top: 35px;
+      position: relative;
+      min-height: 140px;
+    }
+
+    #no-btn {
+      position: relative;
+      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      user-select: none;
+    }
+
+    #yes-btn {
+      text-decoration: none;
+      padding: 12px 32px;
+    }
+  </style>
+</head>
+<body>
+
+  <main id="birthday-container">
+    <section class="page ready-card">
+      <h1 id="ready-heading">Are you ready? 🎉</h1>
+      <p class="sub-prompt" id="sub-prompt">(Whatever you do... don't click "No"! 🙈)</p>
+
+      <div class="ready-buttons" id="button-area">
+        <a href="page2.html" id="yes-btn" class="next-btn">Yes!</a>
+        <button type="button" id="no-btn" class="prev-btn">No 😜</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    let clickCount = 0;
+    const maxClicks = 5;
+
+    // Intriguing button messages for each click
+    const noPhrases = [
+      "Wait, really? 🤨",
+      "Are you sure? 😮",
+      "Don't click me again! 🙈",
+      "You can't resist, can you? 🫣",
+      "Fine, you win! 🎉"
+    ];
+
+    const subPrompts = [
+      "(Seriously, press Yes instead!)",
+      "(Why are you still clicking No? 😂)",
+      "(I warned you! Stop it! 🛑)",
+      "(Okay, one last chance...)",
+      "(Okay okay, you forced my hand!)"
+    ];
+
+    const noBtn = document.getElementById('no-btn');
+    const buttonArea = document.getElementById('button-area');
+    const heading = document.getElementById('ready-heading');
+    const subPrompt = document.getElementById('sub-prompt');
+
+    // Personalize heading if name is saved
+    const savedName = localStorage.getItem('bd_name');
+    if (savedName) {
+      heading.textContent = `${savedName}, are you ready? 🎉`;
+    }
+
+    noBtn.addEventListener('click', () => {
+      clickCount++;
+
+      if (clickCount <= maxClicks) {
+        // 1. Move the button to a new random position inside the container
+        const containerRect = buttonArea.getBoundingClientRect();
+        const btnRect = noBtn.getBoundingClientRect();
+
+        const maxX = (containerRect.width - btnRect.width) / 2;
+        const maxY = 50;
+
+        const randomX = (Math.random() - 0.5) * (maxX * 2);
+        const randomY = (Math.random() - 0.5) * (maxY * 2);
+
+        noBtn.style.position = 'absolute';
+        noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+
+        // 2. Update text to entice them
+        noBtn.textContent = noPhrases[clickCount - 1];
+        subPrompt.textContent = subPrompts[clickCount - 1];
+
+        // 3. On the 5th click, convert the "No" button into a "Yes" button
+        if (clickCount === maxClicks) {
+          setTimeout(convertToYes, 200);
+        }
+      }
+    });
+
+    function convertToYes() {
+      noBtn.textContent = 'YES! ❤️';
+      noBtn.className = 'next-btn';
+      noBtn.style.position = 'static';
+      noBtn.style.transform = 'none';
+
+      // Clicking the converted button navigates to page2.html
+      noBtn.onclick = function() {
+        window.location.href = 'page2.html';
+      };
+    }
+  </script>
+
+</body>
+</html>
